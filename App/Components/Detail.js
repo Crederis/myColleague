@@ -1,5 +1,13 @@
 import React from 'react';
-import { View, Image, TextInput, Text, StyleSheet, ScrollView, SafeAreaView } from 'react-native';
+import {
+  View,
+  Image,
+  TextInput,
+  Text,
+  StyleSheet,
+  ScrollView,
+  SafeAreaView,
+} from 'react-native';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { BLACK, BLUE, GRAY } from '../colors';
@@ -54,12 +62,14 @@ function Detail(props) {
     const dataComplete =
       contactFirstName !== null &&
       contactLastName !== null &&
-      contactAge !== null;
+      contactAge !== null &&
+      contactImage !== null;
     if (dataComplete) {
       const newContact = {
         firstName: contactFirstName,
         lastName: contactLastName,
         age: contactAge,
+        photo: contactImage,
       };
       props.postData(newContact);
       props.navigation.goBack();
@@ -75,13 +85,15 @@ function Detail(props) {
     const dataComplete =
       contactFirstName !== null &&
       contactLastName !== null &&
-      contactAge !== null;
+      contactAge !== null &&
+      contactImage !== null;
     if (dataComplete) {
       const newContact = {
         id: contactId,
         firstName: contactFirstName,
         lastName: contactLastName,
         age: contactAge,
+        photo: contactImage,
       };
       props.updateData(newContact);
       props.navigation.goBack();
@@ -108,10 +120,24 @@ function Detail(props) {
           justifyContent: 'center',
           alignItems: 'center',
         }}>
-        <Image
-          source={{ uri: contactImage }}
-          style={{ height: 150, width: 150, borderRadius: 100 }}
-        />
+        {contactImage ? (
+          <Image
+            source={{ uri: contactImage }}
+            style={{ height: 150, width: 150, borderRadius: 100 }}
+          />
+        ) : (
+            <View
+              style={{
+                height: 150,
+                width: 150,
+                borderRadius: 100,
+                backgroundColor: GRAY,
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <Text>No Image</Text>
+            </View>
+          )}
       </View>
       <ScrollView style={{ flex: 4, padding: 8 }}>
         {params ? (
@@ -152,41 +178,52 @@ function Detail(props) {
           />
         </View>
         {params ? (
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'center',
-              marginVertical: 8,
-            }}>
-            {editable ? (
-              <View style={{ flexDirection: 'row' }}>
-                <Button
-                  secondary
-                  name="Save"
-                  onPress={onSave}
-                  style={{ width: 150 }}
-                />
-                <Button
-                  name="Cancel"
-                  onPress={onCancel}
-                  style={{ width: 150, marginLeft: 8 }}
-                />
-              </View>
-            ) : (
+          <View>
+            <View style={styles.input}>
+              <Text style={styles.fieldTitle}>image url:</Text>
+              <TextInput
+                style={styles.inputField}
+                editable={editable}
+                value={contactImage}
+                onChangeText={(text) => setContactImage(text)}
+              />
+            </View>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                marginVertical: 8,
+              }}>
+              {editable ? (
                 <View style={{ flexDirection: 'row' }}>
                   <Button
                     secondary
-                    name="Edit"
-                    onPress={() => setEditable(true)}
+                    name="Save"
+                    onPress={onSave}
                     style={{ width: 150 }}
                   />
                   <Button
-                    name="Delete"
-                    onPress={deleteContact}
+                    name="Cancel"
+                    onPress={onCancel}
                     style={{ width: 150, marginLeft: 8 }}
                   />
                 </View>
-              )}
+              ) : (
+                  <View style={{ flexDirection: 'row' }}>
+                    <Button
+                      secondary
+                      name="Edit"
+                      onPress={() => setEditable(true)}
+                      style={{ width: 150 }}
+                    />
+                    <Button
+                      name="Delete"
+                      onPress={deleteContact}
+                      style={{ width: 150, marginLeft: 8 }}
+                    />
+                  </View>
+                )}
+            </View>
           </View>
         ) : (
             <Button name="Add" onPress={addNewContact} />

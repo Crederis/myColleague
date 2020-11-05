@@ -1,5 +1,3 @@
-import { receiveData } from '../redux/action';
-
 const CONTACT_API = 'https://simple-contact-crud.herokuapp.com/contact';
 
 export const getContact = async () => {
@@ -20,17 +18,8 @@ export const addContact = (data) => {
         firstName: data.firstName,
         lastName: data.lastName,
         age: data.age,
-        photo:
-          'https://www.detectiveconanworld.com/wiki/images/thumb/9/96/Kaito_Kuroba_Profile.jpg/275px-Kaito_Kuroba_Profile.jpg',
+        photo: data.photo,
       }),
-    }).then(() => {
-      fetch(CONTACT_API)
-        .then((response) => response.json())
-        .then((result) => {
-          receiveData({
-            payload: result.data,
-          });
-        });
     });
   } catch (error) {
     console.log(error);
@@ -57,17 +46,8 @@ export const updateContact = (data) => {
         firstName: data.firstName,
         lastName: data.lastName,
         age: data.age,
-        photo:
-          'https://www.detectiveconanworld.com/wiki/images/thumb/9/96/Kaito_Kuroba_Profile.jpg/275px-Kaito_Kuroba_Profile.jpg',
+        photo: data.photo,
       }),
-    }).then(() => {
-      fetch(CONTACT_API)
-        .then((response) => response.json())
-        .then((result) => {
-          receiveData({
-            payload: result.data,
-          });
-        });
     });
   } catch (error) {
     console.log(error);
